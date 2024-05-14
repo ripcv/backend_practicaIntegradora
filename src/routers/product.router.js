@@ -21,12 +21,22 @@ router.post('/', async(req, res)=> {
     res.send({ result: "success", payload: result })
 })
 
-router.put('/', async(req,res)=> {
-    res.send('Put request to the homepage')
+router.put('/:pid', async(req,res)=> {
+    let {pid} = req.params
+    let productToReplace = req.body
+    if(!productToReplace){
+        res.send({ status: "error", error: "Debe actualizar por lo menos un registro" })
+    }
+
+    let result = await productModel.updateOne({_id :pid}, productToReplace)
+    res.send({ result: "success", payload: result })
 })
 
-router.delete('/', async(req, res) => {
-    res.send('Delete request to the hombepage')
+router.delete('/:pid', async(req, res) => {
+    let { pid } = req.params
+    let result = await productModel.deleteOne({ _id: pid })
+    res.send({ result: "success", payload: result })
 })
+
 
 export default router

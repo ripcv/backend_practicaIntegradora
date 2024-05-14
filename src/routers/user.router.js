@@ -21,12 +21,21 @@ router.post('/', async(req, res)=> {
     res.send({ result: "success", payload: result })
 })
 
-router.put('/', async(req,res)=> {
-    res.send('Put request to the homepage')
+router.put('/:uid', async(req,res)=> {
+    let {uid} = req.params
+    let userToReplace = req.body
+    if(!userToReplace){
+        res.send({ status: "error", error: "Debe actualizar por lo menos un registro" })
+    }
+
+    let result = await userModel.updateOne({_id : uid}, userToReplace)
+    res.send({ result: "success", payload: result })
 })
 
-router.delete('/', async(req, res) => {
-    res.send('Delete request to the hombepage')
+router.delete('/:uid', async(req, res) => {
+    let { uid } = req.params
+    let result = await userModel.deleteOne({ _id: uid })
+    res.send({ result: "success", payload: result })
 })
 
 export default router
