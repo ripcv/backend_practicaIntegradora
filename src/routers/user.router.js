@@ -1,20 +1,32 @@
 import { Router } from "express";
-import UserModel from "../dao/models/user.model.js";
+import userModel from "../dao/models/user.model.js";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send('Hello from users router')
+router.get('/', async(req, res) => {
+    try {
+        let users = await userModel.find()
+        res.send({ result: "success" , payload: users})
+    } catch (error) {
+        console.log(error)
+    }
 })
 
-router.post('/', (req, res)=> {
-    res.send('Post request to the homepage')
+router.post('/', async(req, res)=> {
+    let {nombre,apellido,email} = req.body
+    if(!nombre || !apellido || !email){
+        res.send({ status: "error", error: "Faltan parametros"})
+    }
+    let result = await userModel.create({nombre,apellido,email})
+    res.send({ result: "success", payload: result })
 })
 
-router.put('/', (req,res)=> {
+router.put('/', async(req,res)=> {
     res.send('Put request to the homepage')
 })
 
-router.delete('/', (req, res) => {
+router.delete('/', async(req, res) => {
     res.send('Delete request to the hombepage')
 })
+
+export default router
