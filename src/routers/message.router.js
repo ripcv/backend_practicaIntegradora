@@ -18,7 +18,7 @@ router.get('/', async(req, res) => {
 router.post('/', async(req, res)=> {
     try {
         const newMessage = new messageModel(req.body)
-        if(!user || !mesasge){
+        if(!user && !mesasge){
             res.send({ status: "error", error: "Faltan parametros"})
         }
         await newMessage.save()

@@ -3,20 +3,40 @@ import cartModel from "../dao/models/cart.model.js";
 
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send('Hello from users router')
+router.get('/', async(req, res) => {
+    try {
+        let carts =  await cartModel.find()
+        res.send({ result: "success" , payload: carts})
+    } catch (error) {
+        console.log(error)
+    }
 })
 
-router.post('/', (req, res)=> {
-    res.send('Post request to the homepage')
+router.post('/', async(req, res)=> {
+    let {user, products} = req.body
+    if(!user || !products){
+        res.send({ status: "error", error: "Faltan parametros"})
+    }
+    let result = await cartModel.create({user, products})
+    res.send({ result: "success", payload: result })
 })
 
-router.put('/', (req,res)=> {
+router.put('/:cid', async(req,res)=> {
+    let {cid} = req.params
+    let cartToReplace = req.body
+    if(!cartToReplace){
+        res.send({ status: "error", error: "Debe actualizar por lo menos un registro" })
+    }
     res.send('Put request to the homepage')
+    let result = await cartModel.updateOne({_id :cid}, cartToReplace)
+    res.send({ result: "success", payload: result })
 })
 
-router.delete('/', (req, res) => {
-    res.send('Delete request to the hombepage')
+
+router.delete('/:cid', async(req, res) => {
+    let { cid } = req.params
+    let result = await cartModel.deleteOne({ _id: cid })
+    res.send({ result: "success", payload: result })
 })
 
 export default router
