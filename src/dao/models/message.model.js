@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const messageCollection = "Mensajes"
 
 const messageSchema = new mongoose.Schema({
-    userID: {type: String, required:true, max:30},
+    user: {type: String, required:true, max:30},
     message: {type: String, required:true, max:200},
 
 })
