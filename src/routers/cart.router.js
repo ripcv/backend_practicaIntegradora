@@ -12,6 +12,16 @@ router.get('/', async(req, res) => {
     }
 })
 
+router.get('/:cid', async(req, res) => {
+    let { cid } = req.params
+    try {
+        let cart =  await cartModel.findOne({_id:cid})
+        res.send({ result: "success" , payload: cart})
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 router.post('/', async(req, res)=> {
     let {user, products} = req.body
     if(!user || !products){

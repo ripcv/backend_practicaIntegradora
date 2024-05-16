@@ -12,6 +12,16 @@ router.get('/', async(req, res) => {
     }
 })
 
+router.get('/:pid', async(req, res) => {
+    let { pid } = req.param
+    try {
+        let product = await productModel.findOne({_id:pid})
+        res.send({ result: "success" , payload: product})
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 router.post('/', async(req, res)=> {
     let {title, description, code, price,stock,category,thumbnail,status=true} = req.body
     if(!title || !description || !code || !price || !stock || !category ){

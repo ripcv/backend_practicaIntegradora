@@ -12,6 +12,16 @@ router.get('/', async(req, res) => {
     }
 })
 
+router.get('/:uid', async(req, res) => {
+    let { uid } = req.params
+     try {
+        let user = await userModel.findOne({_id:uid})
+        res.send({ result: "success" , payload: user})
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 router.post('/', async(req, res)=> {
     let {nombre,apellido,email} = req.body
     if(!nombre || !apellido || !email){
