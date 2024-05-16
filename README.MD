@@ -102,7 +102,7 @@ Return specific carts in DB
 
 | Parameter | Type     | Description                       |
 | :-------- | :------- | :-------------------------------- |
-| `user`      | `string` | **Required**. User (correo o nombre) |
+| `user`      | `string` | **Required**. User (email or name) |
 |`products` | `array`| Object that includes the N data below|
 | `product`      | `number` | **Required**.ID of Product to add |
 | `quantity`      | `number` | 1 by default |
