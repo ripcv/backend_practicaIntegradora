@@ -3,10 +3,10 @@ import mongoose from "mongoose";
 const cartCollection = "Carritos"
 
 const cartSchema = new mongoose.Schema({
-    user: {type: String,  max:100},
+    user: {type: String, default:null},
     products: [ 
         {
-            product: {type: String},
+            product: {type: String, default:[]},
             quantity: { type: Number , default:1}
         }
     ]
