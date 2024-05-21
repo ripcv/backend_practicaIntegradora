@@ -24,9 +24,6 @@ router.get('/:cid', async(req, res) => {
 
 router.post('/', async(req, res)=> {
     let {user, products} = req.body
-    if(!user || !products){
-        res.send({ status: "error", error: "Faltan parametros"})
-    }
     let result = await cartModel.create({user, products})
     res.send({ result: "success", payload: result })
 })
