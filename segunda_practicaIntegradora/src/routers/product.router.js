@@ -47,7 +47,7 @@ router.get('/', isAuthenticated,  async(req, res) => {
             nextLink: `/api/products?limit=${products.limit}&page=${products.nextPage}${sort ? `&sort=${sort}`: ""}${query ? `&query=${query}` : ""}`
         }
         console.log(req.session.user)
-        res.render('products',{results,categories,user: req.session.user,msg, isAdmin: req.session.user.role === "admin" , cart:req.session.cart})
+        res.render('products',{results,categories,user: req.session.user,msg, isAdmin: req.session.user.role === "admin" , cart : req.session.user.cartId})
     } catch (error) {
         console.log(error)
     }

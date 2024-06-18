@@ -13,7 +13,7 @@ import initializePassport from './config/passport.config.js';
 import { __dirname } from './utils.js'
 import dotenv from 'dotenv'
 dotenv.config()
-console.log("Desafio Seis")
+console.log("Segunda Pre-entrega")
 
 const app = express();
 
@@ -31,7 +31,13 @@ app.use(session({
     secret: 'secretkey',
     resave: false,
     saveUninitialized: true,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URL,
+        ttl:  14 * 24 * 60 * 60 // le damos un tiempo de vida a la session de 14 días
+     }),
+    cookie: {
+        maxAge: 1000 * 60 * 60, // se permite la session por 1 hora
+        httpOnly: true,
+      }
 }));
 
 initializePassport()

@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from 'passport-local'
-import userService from '../dao/models/users.model.js'
+import userModel from '../dao/models/users.model.js'
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from 'passport-github2'
 
@@ -15,7 +15,7 @@ const initializePassport = () => {
         { passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
             const { first_name, last_name, email, age } = req.body
             try {
-                let user = await userService.findOne({ email: username })
+                let user = await userModel.findOne({ email: username })
                 if (user) {
                     console.log("El usuario ya existe")
                     return done(null, false)
@@ -27,7 +27,7 @@ const initializePassport = () => {
                     age,
                     password: createHash(password)
                 }
-                let result = await userService.create(newUser)
+                let result = await userModel.create(newUser)
                 return done(null, result)
             } catch (error) {
                 return done("Error al obtener el usuario" + error)
@@ -40,7 +40,7 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        let user = await userService.findById(id)
+        let user = await userModel.findById(id)
         done(null, user)
     })
 
@@ -59,7 +59,7 @@ const initializePassport = () => {
             return done(null, user)
         }
         try {
-            const user = await userService.findOne({ email: username })
+            const user = await userModel.findOne({ email: username })
             if (!user) {
                 console.log("El usuario no existe")
                 return done(null, user)
@@ -79,7 +79,7 @@ const initializePassport = () => {
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             console.log(profile._json)
-            let user = await userService.findOne({ githubId: profile._json.id })
+            let user = await userModel.findOne({ githubId: profile._json.id })
             if (!user) {
                 let newUser = {
                     first_name: profile._json.name,
@@ -87,7 +87,7 @@ const initializePassport = () => {
                     email: profile._json.email,
                     githubId: profile._json.id
                 }
-                let result = await userService.create(newUser)
+                let result = await userModel.create(newUser)
                 done(null, result)
             }
             else {

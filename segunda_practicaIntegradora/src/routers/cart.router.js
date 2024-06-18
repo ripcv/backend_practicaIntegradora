@@ -40,11 +40,11 @@ router.post('/', async (req, res) => {
     let product = req.body.product
     
     try {
-        let cartId = req.session.cart ? req.session.cart.cartId : null;
+        let cartId = req.user.cartId ? req.user.cartId : null;
         let cart
         if (products.length === 0 && !product) {
             cart = await cartModel.create({});
-            req.session.cart = { cartId: cart._id };
+            req.user.cartId = { cartId: cart._id };
             return res.send({ result: "success", payload: cart });
         }
         if(product){
@@ -52,14 +52,15 @@ router.post('/', async (req, res) => {
                 product:product
             }]
         }
-        // Buscar el carrito existente en la sesión o crear uno nuevo si no existe
+        // Buscar el carrito existente en la sesión
         if (cartId) {
            cart = await cartModel.findById(cartId);
         }
-        if (!cart) {
+        // Se comenta esta linea de codigo ya que no es necesario crear un carrito aqui por que se esta generando al logear el usuario
+      /*   if (!cart) {
             cart = await cartModel.create({});
             req.session.cart = { cartId: cart._id };
-        }
+        } */
 
         let total =  cart.total || 0;
         let productWithPrices =  cart.products || []

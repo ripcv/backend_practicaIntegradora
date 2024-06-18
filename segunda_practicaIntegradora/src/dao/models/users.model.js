@@ -8,9 +8,11 @@ const userSchema = new mongoose.Schema({
     email: { type: String, unique: true, sparse: true },
     age: Number,
     password: String,
+    cartId: { type: mongoose.Schema.Types.ObjectId, ref: "Carts"    },
+    role: {type: String, default:"user"},
     githubId: { type: String, unique: true },
 });
 
-const firstCollection = mongoose.model(userCollection, userSchema);
+const userModel = mongoose.model(userCollection, userSchema);
 
-export default firstCollection
+export default userModel
