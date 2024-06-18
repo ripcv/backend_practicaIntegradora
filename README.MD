@@ -9,8 +9,12 @@ Se integra todo lo visto en el curso en una sola aplicación que toma todo los r
 - Express-Handlebars v7.1.2
 - Dotenv v16.4.5
 
-## API Reference
-All the app can be used with postman, except for the chat, wich is viewed through the browser.
+## All the App can be use in the browser
+```http
+localhost:8080/login
+````
+
+### Api Reference 
 
 #### Get all products
 
@@ -119,12 +123,6 @@ Return specific carts in DB
       }
     ]
 }
-```
-### Chat
-To use the chat, simply navigate to the following URL and login with your mail o username
-
-```http
-  localhost:8080/api/chat/
 ```
 
 

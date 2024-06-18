@@ -11,8 +11,13 @@ router.get('/register', isNotAuthenticated, (req, res) => {
     res.render('register');
 });
 
+
 router.get('/profile', isAuthenticated, (req, res) => {
-    console.log(req.session.user)
+    res.render('profile', { user: req.session.user });
+});
+
+// es lo mismo que profile, pero se genera por la consigna
+router.get('/current', isAuthenticated, (req, res) => {
     res.render('profile', { user: req.session.user });
 });
 
