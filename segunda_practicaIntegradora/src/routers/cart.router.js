@@ -56,6 +56,11 @@ router.post('/', async (req, res) => {
         if (cartId) {
            cart = await cartModel.findById(cartId);
         }
+        if (cart instanceof cartModel) {
+            console.log("si 1")
+          } else {
+            console.log("no 1")
+          }
         // Se comenta esta linea de codigo ya que no es necesario crear un carrito aqui por que se esta generando al logear el usuario
       /*   if (!cart) {
             cart = await cartModel.create({});
@@ -91,6 +96,11 @@ router.post('/', async (req, res) => {
         
         cart.products = productWithPrices
         cart.total = total
+        if (cart instanceof cartModel) {
+            console.log("si 2")
+          } else {
+            console.log("no 2")
+          }
         await cart.save()
 
         res.redirect('/api/products?msg=ok')
