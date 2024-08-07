@@ -13,6 +13,16 @@ class UserRepository {
     const user = await this.userModel.findOne({ email: email });
     return user;
   }
+
+  async updateUser(userID, updates){
+    const result = await userModel.updateOne(
+      { _id: userID },
+      { $set: updates }
+    );
+                                        
+  return   result
+
+  }
 }
 
 export default UserRepository;

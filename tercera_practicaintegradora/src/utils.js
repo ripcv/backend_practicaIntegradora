@@ -96,3 +96,8 @@ export async function mockingProducts(){
   
   return products
 }
+
+export const randomeToken = () =>{
+ return createHash(faker.lorem.word(5))
+}
+

@@ -45,3 +45,16 @@ export async function findUser(username, password) {
     return "Error al validar usuario" + error;
   }
 }
+
+
+export async function updateUser(userID, updates){
+   try {
+    const userUpdate = await userRepository.updateUser(userID, updates)
+    if(!userUpdate){
+      //error al actualizar
+    }
+    return true
+   } catch (error) {
+    
+   }
+}

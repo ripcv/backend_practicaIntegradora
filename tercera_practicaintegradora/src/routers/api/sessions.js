@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { logger } from '../../logger/logger.js'
+import { resetPassword , changePassword} from "../../controllers/resetController.js";
 const router = Router();
 
 router.post(
@@ -10,6 +11,10 @@ router.post(
     res.redirect("/");
   },
 );
+
+router.post("/reset_password", resetPassword)
+
+router.post("/change_password", changePassword)
 
 router.get("/failregister", (req, res) => {
   logger.warning("Fallo al registrar");
@@ -53,6 +58,8 @@ router.post("/logout", (req, res) => {
     res.redirect("/");
   });
 });
+
+
 
 router.get(
   "/github",

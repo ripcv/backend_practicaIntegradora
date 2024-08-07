@@ -18,3 +18,22 @@ export async function findUser(username, password) {
     return res.redirect("/login");
   }
 }
+
+export async function updateUser(userID, updates){
+  console.log(userID)
+  console.log(updates)
+  //recibo el campo userID y los archivos a actualizar
+  if(!userID || !updates)
+    return res.redirect("/")
+  
+  //se envian al service
+  const update = await UserService.updateUser(userID,updates)
+  //recibo el usuario actualizado y redirijo al login
+  if(!update){
+    //manejo el error
+    return false
+  }
+  //manejamos la actualizacion correcta
+  console.log("usuario actualizado")
+  console.log(update)
+}
