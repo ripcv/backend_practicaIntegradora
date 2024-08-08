@@ -48,7 +48,8 @@ router.post(
 );
 
 router.get("/faillogin", (req, res) => {
-  logger.warning(`Error al logear, usuario o clave incorrecta $`)
+  logger.warning(`Error al logear, usuario o clave incorrecta`)
+  req.flash('error', 'Error al logear, usuario o clave incorrecta');
   res.redirect('/');
 });
 

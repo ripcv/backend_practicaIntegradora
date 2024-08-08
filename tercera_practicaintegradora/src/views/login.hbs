@@ -18,12 +18,20 @@
 
    <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const errorMessage = '{{errorMessage}}';
+            const errorMessage = '{{messages.error}}';
+            const successMessage = '{{messages.success}}';
             if (errorMessage) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Error',
                     text: errorMessage,
+                });
+            }
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Exito',
+                    text: successMessage,
                 });
             }
         });

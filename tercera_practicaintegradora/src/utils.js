@@ -69,6 +69,24 @@ export async function sendMail(email, ticket) {
   });
 }
 
+export async function sendMailToken(email, url) {
+  let result = await transport.sendMail({
+    from: "Recuperación de Contraseña <gefallene.engel@gmail.com>",
+    to: email,
+    subject: `Solicitud de reestablecimiento de contraseña`,
+    html: `
+   <div style="text-align: center;">
+    <h1 style="font-size: 24px;">Restablecimiento de contraseña</h1>
+    <p style="font-size: 16px; line-height: 1.5;">
+      Para cambiar su contraseña haga clic en el siguiente enlace:
+    </p>
+    <a href="${url}"> Click Aquí </a>
+    <br>${url}
+    <p style="font-size: 14px; text-decoration: underline;">Si ud no solicito el restablecimiento le recomendamos actualizar sus claves y no compartir este link con nadie</p>
+  </div>
+    `,
+  });
+}
 
 export async function mockingProducts(){
   let products = {

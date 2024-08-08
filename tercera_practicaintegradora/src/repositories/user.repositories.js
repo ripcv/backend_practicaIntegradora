@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import userModel from "../dao/models/users.model.js";
 
 class UserRepository {
@@ -9,8 +10,15 @@ class UserRepository {
     return user;
   }
 
-  async findUser(email) {
-    const user = await this.userModel.findOne({ email: email });
+  async findUser(identifier) {
+    let query = {}
+
+    if(mongoose.Types.ObjectId.isValid(identifier)){
+      query = {_id : identifier}
+    }else{
+      query = {email:identifier}
+    }
+    const user = await this.userModel.findOne(query);
     return user;
   }
 

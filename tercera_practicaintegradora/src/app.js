@@ -20,6 +20,7 @@ import { Server } from "socket.io";
 import path from "path";
 import dotenv from "dotenv";
 import { addLogger } from "./logger/logger.js";
+import flash from 'connect-flash'
 dotenv.config();
 console.log("Tercera Practica Integradora");
 const app = express();
@@ -68,7 +69,11 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(addLogger)
-
+app.use(flash());
+app.use((req, res, next) => {
+    res.locals.messages = req.flash();
+    next();
+});
 app.use(express.static(__dirname + "/public"));
 app.use("/api/sessions", sessionsRouter);
 app.use("/", viewsRouter);

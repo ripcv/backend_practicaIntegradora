@@ -1,12 +1,17 @@
 import tokenModel from "../dao/models/token.model.js";
 
 export async function saveToken(userId,token){
-    const tokenData = {
-        userID : userId,
-        token: token,
+    try {
+        const result = await tokenModel.updateOne(
+            {userID: userId},
+            {$set: {token:token}},
+            {upsert: true}
+        )
+        return result.nModified > 0 || result.upsertedCount > 0;
+    } catch (error) {
+        //manejar error en log
     }
-
-    const result = await tokenModel.create(tokenData)
+    
 }
 
 export async function validToken(userID,token){
@@ -21,7 +26,16 @@ export async function validToken(userID,token){
     }
     return false
    } catch (error) {
-    
+    //manejar error en log
    }
 
+}
+
+export async function deleteToken(userID){
+    try {
+        const result = await tokenModel.deleteOne({userID})
+        return true
+    } catch (err) {
+        //manejar error en log
+    }
 }
