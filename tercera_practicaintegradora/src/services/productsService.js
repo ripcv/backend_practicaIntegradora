@@ -61,3 +61,4 @@ export async function deleteProduct(pid) {
   let result = await productModel.deleteOne({ _id: pid.pid });
   return result;
 }
+

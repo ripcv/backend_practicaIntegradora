@@ -31,6 +31,7 @@ router.post(
         .send({ status: "error", error: "Datos incompletos" });
     try {
       req.session.user = {
+        id: req.user._id,
         first_name: req.user.first_name,
         last_name: req.user.last_name,
         email: req.user.email,

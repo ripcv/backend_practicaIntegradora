@@ -12,6 +12,7 @@ const productSchema = new mongoose.Schema({
   category: { type: String, required: true, max: 50 },
   thumbnail: { type: String, max: 50 },
   status: { type: String, required: true, max: 10, default: true },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
 });
 
 productSchema.plugin(mongoosePaginate);

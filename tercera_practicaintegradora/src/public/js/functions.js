@@ -22,6 +22,8 @@ function sweetAlert(position,icon,successMessage,redirectUrl){
         showConfirmButton: false,
         timer: 2500
     }).then(() => {
-        window.location.href = redirectUrl;
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
     });
 }

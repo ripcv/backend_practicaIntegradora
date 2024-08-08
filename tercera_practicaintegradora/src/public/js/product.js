@@ -1,7 +1,16 @@
 document.querySelectorAll('.add-to-cart').forEach(button => {
-    button.addEventListener('click', async (event) => {
-        const productId = event.target.dataset.id;
+    const ownerId = button.dataset.owner;
+    const productId = button.dataset.id;
 
+    if(ownerId === userId){
+       button.addEventListener('click', (event)=>{
+        sweetAlert("top-end","error","No puede agregar productos propios")
+       })
+    }else{
+    
+    button.addEventListener('click', async (event) => {
+        console.log(ownerId)
+        console.log(userId)
         try {
             const response = await fetch('/carts', {
                 method: 'POST',
@@ -30,6 +39,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
             sweetAlert("top-end","error","Error al agregar el producto",'/products')
         }
     });
+}
 });
 
 

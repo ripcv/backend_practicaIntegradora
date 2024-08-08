@@ -16,7 +16,6 @@ export async function getAllProducts(req, res) {
     products.payload.forEach((product) => {
       product.isAdmin = isAdmin;
     });
-
     return res.render("products", {
       products: products,
       user: req.session.user,
