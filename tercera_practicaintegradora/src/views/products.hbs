@@ -12,7 +12,7 @@
         </p>
         {{/each}}
     </div>
-    {{#roleCheck user.role isAdmin}}
+    {{#roleCheck user.role}}
     <div class="createProduct">
         <a href="/api/product/create" >
             <button>Agregar Producto</button>
@@ -44,7 +44,7 @@
                  
                 <td class="buttonActions"><button type="submit" class="add-to-cart" data-id="{{id}}"  data-owner="{{this.owner}}">Agregar al carrito</button>
                  
-                    {{#roleOwnerCheck ../user.id owner ../isAdmin}} 
+                    {{#roleOwnerCheck ../user.id owner ../user.role}} 
                     <a href="/api/product/edit/{{../id}}">
                         <button class="edit-product" data-id="{{../id}}">Edit</button>
                     </a>

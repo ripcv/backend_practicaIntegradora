@@ -12,14 +12,10 @@ export async function getAllProducts(req, res) {
       sort,
       query,
     );
-    const isAdmin = req.session.user.role === "admin";
-    products.payload.forEach((product) => {
-      product.isAdmin = isAdmin;
-    });
+    
     return res.render("products", {
       products: products,
       user: req.session.user,
-      isAdmin: req.session.user.role === "admin",
       cart: req.session.user.cartId,
       pageProducts: "true",
     });
