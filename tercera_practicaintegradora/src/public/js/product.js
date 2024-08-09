@@ -1,7 +1,9 @@
+
+
 document.querySelectorAll('.add-to-cart').forEach(button => {
     const ownerId = button.dataset.owner;
     const productId = button.dataset.id;
-
+    
     if(ownerId === userId){
        button.addEventListener('click', (event)=>{
         sweetAlert("top-end","error","No puede agregar productos propios")
@@ -9,8 +11,6 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
     }else{
     
     button.addEventListener('click', async (event) => {
-        console.log(ownerId)
-        console.log(userId)
         try {
             const response = await fetch('/carts', {
                 method: 'POST',
@@ -82,3 +82,4 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         }
       });
     
+  

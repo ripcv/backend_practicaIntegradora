@@ -5,7 +5,6 @@ export async function createUser(newUser) {
     const result = await UserService.createUser(newUser);
     return result;
   } catch (error) {
-    console.log(error)
     return res.redirect("/register");
   }
 }
@@ -20,8 +19,6 @@ export async function findUser(username, password) {
 }
 
 export async function updateUser(userID, updates){
-  console.log(userID)
-  console.log(updates)
   //recibo el campo userID y los archivos a actualizar
   if(!userID || !updates)
     return res.redirect("/")
@@ -34,6 +31,5 @@ export async function updateUser(userID, updates){
     return false
   }
   //manejamos la actualizacion correcta
-  console.log("usuario actualizado")
-  console.log(update)
+  return res.redirect("/")
 }

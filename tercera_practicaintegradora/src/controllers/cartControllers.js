@@ -64,7 +64,6 @@ export async function addProducts(req, res) {
       message: "Producto agregado exitosamente",
     });
   } catch (error) {
-    console.log(error);
     res.send({ status: "error", error: "Error en el servidor" });
   }
 }

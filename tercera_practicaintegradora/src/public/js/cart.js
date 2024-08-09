@@ -19,7 +19,6 @@ document.getElementById('purchaseForm').addEventListener('submit', async (event)
 
         const result = await response.json();
         let mensaje = " "
-        console.log(result.products)
             if(!result.products){
                 mensaje = "El carrito esta vacio, favor agregar productos"
             }else{
