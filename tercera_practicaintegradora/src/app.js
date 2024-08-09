@@ -2,6 +2,7 @@ import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
 import { engine } from "express-handlebars";
+import {roleOwnerCheck , roleCheck} from './views/helper.js'
 import mongoose from "./config/database.js";
 import MongoStore from "connect-mongo";
 import sessionsRouter from "./routers/api/sessions.js";
@@ -39,6 +40,10 @@ app.engine(
     extname: ".hbs",
     defaultLayout: "main",
     partialsDir: path.join(__dirname, "views/partials"),
+    helpers:{
+      roleOwnerCheck: roleOwnerCheck,
+      roleCheck: roleCheck
+    }
   }),
 );
 

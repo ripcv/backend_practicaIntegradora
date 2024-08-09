@@ -12,13 +12,13 @@
         </p>
         {{/each}}
     </div>
-    {{#if isAdmin}}
+    {{#roleCheck user.role isAdmin}}
     <div class="createProduct">
         <a href="/api/product/create" >
             <button>Agregar Producto</button>
         </a>
     </div>
-    {{/if}}
+    {{/roleCheck}}
     <table class="table_display">
         <thead>
             <th>Titulo</th>
@@ -31,6 +31,7 @@
             <th>Accion</th>
         </thead>
         <tbody>
+               
             {{#each products.payload}}
             <tr>
                 <td>{{this.title}}</td>
@@ -40,13 +41,15 @@
                 <td>{{this.category}}</td>
                 <td>{{this.code}}</td>
                 <td>{{this.stock}}</td>
+                 
                 <td class="buttonActions"><button type="submit" class="add-to-cart" data-id="{{id}}"  data-owner="{{this.owner}}">Agregar al carrito</button>
-                    {{#if isAdmin}}
-                    <a href="/api/product/edit/{{id}}">
-                        <button class="edit-product" data-id="{{id}}">Edit</button>
+                 
+                    {{#roleOwnerCheck ../user.id owner ../isAdmin}} 
+                    <a href="/api/product/edit/{{../id}}">
+                        <button class="edit-product" data-id="{{../id}}">Edit</button>
                     </a>
-                    <button class="delete-product" data-id="{{id}}">Delete</button>
-                    {{/if}}
+                    <button class="delete-product" data-id="{{../id}}">Delete</button>
+                    {{/roleOwnerCheck}}
 
                 </td>
             </tr>
@@ -65,7 +68,7 @@
 </div>
 
 <script>
-    const userId = "{{user.id}}"; // Suponiendo que `currentUser` está disponible en tu contexto
+  const userId = '{{user.id}}'
 </script>
 
 <script src="/js/functions.js"></script>

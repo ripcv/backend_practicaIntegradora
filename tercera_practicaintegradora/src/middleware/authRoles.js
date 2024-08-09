@@ -1,6 +1,7 @@
 export const ROLES = {
   admin: 'admin',
   user: 'user',
+  premiun: 'premiun'
 }
 
 export const authorize = (roles) => {
