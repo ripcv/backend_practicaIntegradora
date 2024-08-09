@@ -10,7 +10,8 @@ export async function resetPassword (req,res){
  const email = req.body.email
  const user =  await userRepository.findUser(email)
  if(!user){
-    return
+   req.flash('error', 'Correo ingresado no valido' )
+   return res.redirect("/reset_password")
  }
  const token = randomeToken()
  if(saveToken(user._id,token)){
