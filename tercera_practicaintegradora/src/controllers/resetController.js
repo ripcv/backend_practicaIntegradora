@@ -1,9 +1,8 @@
 import { randomeToken, createHash , isValidPassword, sendMailToken} from "../utils.js";
 import userModel from "../dao/models/users.model.js";
 import UserRepository from "../repositories/user.repositories.js";
-import { saveToken, deleteToken } from "../services/resetService.js";
+import { saveToken , deleteToken } from "../services/resetService.js";
 import * as userController from '../controllers/usersControllers.js'
-
 const userRepository = new UserRepository(userModel);
 
 export async function resetPassword (req,res){
@@ -26,15 +25,19 @@ export async function resetPassword (req,res){
 }
 
 export async function changePassword (req,res){
+  console.log("ChangePassword")
    const userID = req.body.userID
    const password = req.body.password
+   console.log(userID,password)
    const user =  await userRepository.findUser(userID)
   if(isValidPassword(user,password)){
+    console.log("Clave igual")
    return "No Puede usar la misma clave"
   }else{
-   const userUpdate = await userController.updateUser(userID,{password:createHash(password)})
+   const userUpdate = await userController.updateUser( userID, {password:createHash(password)}) 
+   if(userUpdate)
+   await deleteToken(userID)
+    return res.redirect('/')
   }
-   
-   
-   return res.redirect("/")
+  
 }

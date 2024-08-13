@@ -6,6 +6,7 @@ import {roleOwnerCheck , roleCheck} from './views/helper.js'
 import mongoose from "./config/database.js";
 import MongoStore from "connect-mongo";
 import sessionsRouter from "./routers/api/sessions.js";
+import apiUser from "./routers/api/users.js"
 import viewsRouter from "./routers/views.js";
 import productRouters from "./routers/product.router.js";
 import cartRouters from "./routers/cart.router.js";
@@ -80,7 +81,10 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.static(__dirname + "/public"));
+//api
 app.use("/api/sessions", sessionsRouter);
+app.use("/api/users",apiUser);
+//views
 app.use("/", viewsRouter);
 app.use("/products", productRouters);
 app.use("/carts", cartRouters);

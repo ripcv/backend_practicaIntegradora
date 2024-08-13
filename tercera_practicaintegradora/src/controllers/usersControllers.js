@@ -9,7 +9,7 @@ export async function createUser(newUser) {
   }
 }
 
-export async function findUser(username, password) {
+export async function findUser(username, password ) {
   try {
     const result = await UserService.findUser(username, password);
     return result;
@@ -21,7 +21,7 @@ export async function findUser(username, password) {
 export async function updateUser(userID, updates){
   //recibo el campo userID y los archivos a actualizar
   if(!userID || !updates)
-    return res.redirect("/")
+    return false
 
   //se envian al service
   const update = await UserService.updateUser(userID,updates)
@@ -31,5 +31,22 @@ export async function updateUser(userID, updates){
     return false
   }
   //manejamos la actualizacion correcta
-  return res.redirect("/")
+  return true
+}
+
+
+export async function apiUpdateUser(req,res){
+   const userID = req.params.uid
+   const updates = req.body.updates
+   console.log(userID)
+  if(!userID || !updates)
+    return res.status(400).json({ message: 'Datos incompletos' });
+
+  //se envian al service
+  const update = await UserService.updateUser(userID,updates)
+  //recibo el usuario actualizado y redirijo al login
+  if(!update){
+    return res.status(400).json({ message: 'Error al actualizar el registro' });
+  }
+  return res.status(200).json({ message: 'Actualización Correcta' });
 }
