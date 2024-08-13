@@ -25,13 +25,10 @@ export async function resetPassword (req,res){
 }
 
 export async function changePassword (req,res){
-  console.log("ChangePassword")
    const userID = req.body.userID
    const password = req.body.password
-   console.log(userID,password)
    const user =  await userRepository.findUser(userID)
   if(isValidPassword(user,password)){
-    console.log("Clave igual")
    return "No Puede usar la misma clave"
   }else{
    const userUpdate = await userController.updateUser( userID, {password:createHash(password)}) 
