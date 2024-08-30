@@ -1,12 +1,12 @@
 import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
-import * as UsersControllers from "../controllers/api/users.js";
+import ApiUserController from "../controllers/api/users.js";
 import userModel from "../dao/models/users.model.js";
 import { addCartToUser, createHash } from "../utils.js";
 
 const LocalStrategy = local.Strategy;
-
+const ApiUser = new ApiUserController
 const initializePassport = () => {
   //Registro de Usuario
   passport.use(
@@ -23,7 +23,7 @@ const initializePassport = () => {
           password: createHash(password),
         };
         try {
-          const result = await UsersControllers.createUser(newUser);
+          const result = await ApiUser.createUser(newUser);
           if (result.success) {
             return done(null, result.data);
           } else {
@@ -51,7 +51,7 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await UsersControllers.loginFindUser(username, password);
+          const user = await ApiUser.loginFindUser(username, password);
           return done(null, user);
         } catch (error) {
           return done(error);

@@ -7,8 +7,10 @@ import {
 import userModel from "../../dao/models/users.model.js";
 import UserRepository from "../../repositories/user.repositories.js";
 import { saveToken, deleteToken, findToken } from "../../services/resetService.js";
-import * as userController from "./users.js";
+import ApiUserController from "./users.js";
+
 const userRepository = new UserRepository(userModel);
+const ApiUser = new ApiUserController()
 
 export async function resetPassword(req, res) {
   const email = req.body.email;
@@ -37,7 +39,7 @@ export async function changePassword(req, res) {
     req.flash("error", "No se puede utilizar la misma contraseña")
     res.redirect(`/change_password?token=${result.token}&id=${userID}`)
   } else {
-     const userUpdate = await userController.updateUser(userID, {
+     const userUpdate = await ApiUser.updateUser(userID, {
       password: createHash(password),
     });
    if (userUpdate){ await deleteToken(userID);
