@@ -5,7 +5,9 @@ import {
   resetPassword,
   changePassword,
 } from "../../controllers/api/reset.js";
+import ApiUserController  from "../../controllers/api/users.js";
 const router = Router();
+const ApiUser = new ApiUserController()
 
 router.post(
   "/register",
@@ -73,11 +75,14 @@ router.get("/faillogin", (req, res) => {
   res.redirect("/");
 });
 
-router.post("/logout", (req, res) => {
-  req.session.destroy((err) => {
+router.post("/logout", async(req, res) => {
+ const result =  await ApiUser.updateUser(req.session.user.id , {last_connection: new Date})
+ if(result){
+  req.session.destroy( (err) => {
     if (err) return res.status(500).send("Error al cerrar sesión");
     res.redirect("/");
   });
+ }
 });
 
 router.get(

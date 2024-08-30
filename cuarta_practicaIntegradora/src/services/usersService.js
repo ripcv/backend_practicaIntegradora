@@ -40,6 +40,7 @@ export async function loginFindUser(username, password) {
     );
     const newCartId = await addCartToUser(user._id);
     if (newCartId) userDTO.cartId = newCartId;
+    await updateUser(user._id,{last_connection: new Date})
     return userDTO;
   } catch (error) {
     return "Error al validar usuario" + error;
