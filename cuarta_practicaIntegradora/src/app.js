@@ -4,8 +4,6 @@ import bodyParser from "body-parser";
 import { engine } from "express-handlebars";
 import mongoose from "./config/database.js";
 import MongoStore from "connect-mongo";
-import mockingRouter from "./routers/mocks.router.js";
-import loggerRouter from "./routers/loggerTest.router.js";
 import handleErrors from "./middleware/errors/index.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
@@ -18,19 +16,9 @@ import { addLogger } from "./logger/logger.js";
 import flash from "connect-flash";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUiExpress from "swagger-ui-express";
-
-//Vistas
-import viewsRouter from "./routers/views.js";
 import { roleOwnerCheck, roleCheck } from "./views/helper.js";
-import ViewProductRouter from "./routers/views/product.js";
-import ViewCartRouter from "./routers/views/cart.js";
-import ViewchatRouter from "./routers/views/chat.js";
+import setupRoutes from "./routers/routes.js";
 
-//Apis
-import sessionsRouter from "./routers/api/sessions.js";
-import ApiProductRouter from "./routers/api/product.js";
-import ApiUserRouter from "./routers/api/users.js";
-import ApiCartRouter from "./routers/api/cart.js";
 
 dotenv.config();
 console.log("Cuarta Practica Integradora");
@@ -105,21 +93,10 @@ app.use((req, res, next) => {
 app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use(express.static(__dirname + "/public"));
 
-//Api Routers
-app.use("/api/sessions", sessionsRouter);
-app.use("/api/users", ApiUserRouter);
-app.use("/api/products", ApiProductRouter);
-app.use("/api/carts", ApiCartRouter);
-//View Routers
-app.use("/products", ViewProductRouter);
-app.use("/carts", ViewCartRouter);
-app.use("/", viewsRouter);
-app.use("/chat", ViewchatRouter);
+//Llamamos a las rutas
+setupRoutes(app)
 
-//Pendientes por migrar
 
-app.use("/mockingproducts", mockingRouter);
-app.use("/loggerview", loggerRouter);
 app.use(handleErrors);
 socketServer.on("connection", socketController);
 /* 
