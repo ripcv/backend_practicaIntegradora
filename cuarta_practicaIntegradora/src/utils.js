@@ -7,6 +7,7 @@ import nodemailer from "nodemailer";
 import { faker } from "@faker-js/faker";
 import dotenv from "dotenv";
 import { loggers } from "winston";
+import mongoose from "mongoose";
 dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 
@@ -19,19 +20,23 @@ export const isValidPassword = (user, password) =>
   bcrypt.compareSync(password, user.password);
 
 //Funcion para verfificar si existe un cartId asignado al usuario
-
 export const addCartToUser = async (userId) => {
   try {
-    const updateUser = await userModel.findById(userId);
-    if (!updateUser.cartId) {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      throw new Error("Usuario no encontrado");
+    }
+    if (!user.cartId || !(await cartModel.findById(user.cartId))) {
       const newCart = new cartModel();
       await newCart.save();
-      updateUser.cartId = newCart._id;
-      await updateUser.save();
+      user.cartId = newCart._id;
+      await user.save();
+      return newCart._id;
     }
-    return updateUser.cartId;
+
+    return user.cartId;
   } catch (error) {
-    loggers.error(`No se pudo agregar el carrito al usuario ${error.message}`)
+    loggers.error(`No se pudo agregar el carrito al usuario ${error.message}`);
     throw err;
   }
 };
@@ -88,34 +93,37 @@ export async function sendMailToken(email, url) {
   });
 }
 
-export async function mockingProducts(){
+export async function mockingProducts() {
   let products = {
-    payload : [],
-    categories : []
-  }
-  for (let i=0; i<100; i++){
+    payload: [],
+    categories: [],
+  };
+  for (let i = 0; i < 100; i++) {
     const product = {
       title: faker.commerce.productName(),
       description: faker.commerce.productDescription(),
-      code: faker.string.octal({ length: 6, prefix: 'CE' }),
+      code: faker.string.octal({ length: 6, prefix: "CE" }),
       price: faker.commerce.price(),
       stock: faker.number.int({ min: 15000, max: 35000 }),
       category: faker.commerce.productAdjective(),
-      thumbnail: faker.image.url()
-    }
-    products.payload.push(product)
+      thumbnail: faker.image.url(),
+    };
+    products.payload.push(product);
   }
   const categorySet = new Set();
-  products.payload.forEach(p => {
+  products.payload.forEach((p) => {
     categorySet.add(p.category);
   });
-  
+
   products.categories = Array.from(categorySet);
-  
-  return products
+
+  return products;
 }
 
-export const randomeToken = () =>{
- return createHash(faker.lorem.word(5))
-}
+export const randomeToken = () => {
+  return createHash(faker.lorem.word(5));
+};
 
+export const validTypeMongoose = (value) => {
+  return mongoose.Types.ObjectId.isValid(value);
+};

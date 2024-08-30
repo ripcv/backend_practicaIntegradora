@@ -21,7 +21,7 @@ export async function createUser(newUser) {
   }
 }
 
-export async function findUser(username, password) {
+export async function loginFindUser(username, password) {
   try {
     const user = await userRepository.findUser(username);
 

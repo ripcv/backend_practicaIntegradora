@@ -1,13 +1,13 @@
-import Router from 'express'
-import * as userController from '../../controllers/usersControllers.js'
+import Router from "express";
+import * as userController from "../../controllers/api/users.js";
 
-const router = Router()
+const ApiUserRouter = Router();
 
-router.get('/', (req,res)=>{
-    console.log("user api")
-})
-router.put("/:uid",userController.apiUpdateUser)
+ApiUserRouter.get("/", (req, res) => {
+  console.log("user api");
+});
+ApiUserRouter.put("/:uid", userController.apiUpdateUser);
 
-router.put("/premium/:uid",userController.apiUpdateUser)
+ApiUserRouter.put("/premium/:uid", userController.apiUpdateUser);
 
-export default router
+export default ApiUserRouter;

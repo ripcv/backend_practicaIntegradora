@@ -2,18 +2,11 @@ import express from "express";
 import session from "express-session";
 import bodyParser from "body-parser";
 import { engine } from "express-handlebars";
-import {roleOwnerCheck , roleCheck} from './views/helper.js'
 import mongoose from "./config/database.js";
 import MongoStore from "connect-mongo";
-import sessionsRouter from "./routers/api/sessions.js";
-import apiUser from "./routers/api/users.js"
-import viewsRouter from "./routers/views.js";
-import productRouters from "./routers/product.router.js";
-import cartRouters from "./routers/cart.router.js";
-import chatRouters from "./routers/chat.router.js";
-import mockingRouter from "./routers/mocks.router.js"
-import loggerRouter from "./routers/loggerTest.router.js"
-import handleErrors from "./middleware/errors/index.js"
+import mockingRouter from "./routers/mocks.router.js";
+import loggerRouter from "./routers/loggerTest.router.js";
+import handleErrors from "./middleware/errors/index.js";
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { __dirname } from "./utils.js";
@@ -22,30 +15,44 @@ import { Server } from "socket.io";
 import path from "path";
 import dotenv from "dotenv";
 import { addLogger } from "./logger/logger.js";
-import flash from 'connect-flash'
+import flash from "connect-flash";
 import swaggerJsdoc from "swagger-jsdoc";
-import swaggerUiExpress from 'swagger-ui-express'
+import swaggerUiExpress from "swagger-ui-express";
+
+//Vistas
+import viewsRouter from "./routers/views.js";
+import { roleOwnerCheck, roleCheck } from "./views/helper.js";
+import ViewProductRouter from "./routers/views/product.js";
+import ViewCartRouter from "./routers/views/cart.js";
+import ViewchatRouter from "./routers/views/chat.js";
+
+//Apis
+import sessionsRouter from "./routers/api/sessions.js";
+import ApiProductRouter from "./routers/api/product.js";
+import ApiUserRouter from "./routers/api/users.js";
+import ApiCartRouter from "./routers/api/cart.js";
+
 dotenv.config();
-console.log("Desafio Nro 11, Implementacion de Test");
+console.log("Cuarta Practica Integradora");
 const app = express();
 const PORT = process.env.PORT;
 
 const httpServer = app.listen(
   PORT,
-  console.log(`Server running on port ${PORT}`),
+  console.log(`Server running on port ${PORT}`)
 );
 
 const swaggerOptions = {
-  definition:{
-    openapi:'3.0.1',
-    info:{
+  definition: {
+    openapi: "3.0.1",
+    info: {
       title: "Documentacion API",
-      description: "documentación de api Productos y Cart de la Ticketera"
-    }
+      description: "documentación de api Productos y Cart de la Ticketera",
+    },
   },
-  apis:[`${__dirname}/docs/**/*.yaml`]
-}
-const specs = swaggerJsdoc(swaggerOptions)
+  apis: [`${__dirname}/docs/**/*.yaml`],
+};
+const specs = swaggerJsdoc(swaggerOptions);
 const socketServer = new Server(httpServer);
 
 app.engine(
@@ -54,13 +61,12 @@ app.engine(
     extname: ".hbs",
     defaultLayout: "main",
     partialsDir: path.join(__dirname, "views/partials"),
-    helpers:{
+    helpers: {
       roleOwnerCheck: roleOwnerCheck,
-      roleCheck: roleCheck
-    }
-  }),
+      roleCheck: roleCheck,
+    },
+  })
 );
-
 app.set("view engine", "hbs");
 app.set("views", "src/views");
 
@@ -73,39 +79,48 @@ app.use(
     resave: false,
     saveUninitialized: true,
     store: MongoStore.create({
-      mongoUrl: process.env.TEST_ENV === 'true' ? process.env.TEST_MONGO_URL : process.env.MONGO_URL,
+      mongoUrl:
+        process.env.TEST_ENV === "true"
+          ? process.env.TEST_MONGO_URL
+          : process.env.MONGO_URL,
       ttl: 14 * 24 * 60 * 60, // le damos un tiempo de vida a la session de 14 días
     }),
     cookie: {
       maxAge: 1000 * 60 * 60, // se permite la session por 1 hora
       httpOnly: true,
     },
-  }),
+  })
 );
 
 initializePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(addLogger)
+app.use(addLogger);
 app.use(flash());
 app.use((req, res, next) => {
-    res.locals.messages = req.flash();
-    next();
+  res.locals.messages = req.flash();
+  next();
 });
-app.use('/apidocs', swaggerUiExpress.serve,swaggerUiExpress.setup(specs))
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 app.use(express.static(__dirname + "/public"));
-//api
+
+//Api Routers
 app.use("/api/sessions", sessionsRouter);
-app.use("/api/users",apiUser);
-//views
+app.use("/api/users", ApiUserRouter);
+app.use("/api/products", ApiProductRouter);
+app.use("/api/carts", ApiCartRouter);
+//View Routers
+app.use("/products", ViewProductRouter);
+app.use("/carts", ViewCartRouter);
 app.use("/", viewsRouter);
-app.use("/products", productRouters);
-app.use("/carts", cartRouters);
-app.use("/chat", chatRouters);
+app.use("/chat", ViewchatRouter);
+
+//Pendientes por migrar
+
 app.use("/mockingproducts", mockingRouter);
-app.use("/loggerview", loggerRouter)
-app.use(handleErrors)
+app.use("/loggerview", loggerRouter);
+app.use(handleErrors);
 socketServer.on("connection", socketController);
 /* 
 app.listen(PORT, () => {

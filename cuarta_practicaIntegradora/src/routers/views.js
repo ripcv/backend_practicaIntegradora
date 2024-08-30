@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { isAuthenticated, isNotAuthenticated } from "../middleware/auth.js";
 import { authorize , ROLES } from "../middleware/authRoles.js";
-import { renderProductForm } from "../controllers/productsControllers.js";
 import { isValidToken } from "../middleware/authToken.js";
 
 const router = Router();
@@ -25,8 +24,4 @@ router.get("/change_password",isValidToken,(req,res)=>{
 router.get("/profile", isAuthenticated, (req, res) => {
   res.render("profile", { user: req.session.user, pageProfile: "true" });
 });
-
-router.get("/api/product/create", authorize([ROLES.admin, ROLES.premiun]), renderProductForm);
-router.get("/api/product/edit/:pid", authorize([ROLES.admin,  ROLES.premiun]), renderProductForm);
-
 export default router;

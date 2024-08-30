@@ -12,7 +12,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
     
     button.addEventListener('click', async (event) => {
         try {
-            const response = await fetch('/carts', {
+            const response = await fetch('/api/carts', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -47,7 +47,7 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         document.querySelectorAll('.delete-product').forEach(button => {
             button.addEventListener('click', (event) => {
                 const productId = event.target.dataset.id;
-                handleDeletion(`/products/${productId}`, 'Producto eliminado correctamente', `/products`);
+                handleDeletion(`/api/products/${productId}`, 'Producto eliminado correctamente', `/products`);
             });
         });
     });
@@ -60,8 +60,9 @@ document.querySelectorAll('.add-to-cart').forEach(button => {
         const form = event.target;
         const formData = new FormData(form);
         const data = Object.fromEntries(formData);
-        const url = productId ? `/products/${productId}` : '/products';
+        const url = productId ? `/api/products/${productId}` : '/api/products';
         const method = productId ? 'PUT' : 'POST';
+
         try {
           const response = await fetch(url, {
             method: method,

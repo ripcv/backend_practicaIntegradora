@@ -3,8 +3,9 @@ import ProductRepository from "../repositories/product.repositories.js";
 
 const productRepository = new ProductRepository(productModel);
 
-export async function getAllProducts(limit, page, sort, query) {
+export async function getAllProducts({limit=10, page=1, sort, query}) {
   let filter = {};
+  
   if (query) {
     filter = {
       $or: [{ category: query }, { status: query.toLowerCase() === "true" }],

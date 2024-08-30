@@ -4,6 +4,7 @@ import { getProductById } from "./productsService.js";
 import { codeTicketGenerator } from "../utils.js";
 import ticketModel from "../dao/models/ticket.model.js";
 import { logger } from "../logger/logger.js"
+import { validTypeMongoose } from "../utils.js";
 
 export async function getAllCarts() {
   let carts = await cartModel.find();
@@ -14,7 +15,9 @@ export async function getAllCarts() {
 }
 
 export async function getCartById(cid) {
-  let cart = await cartModel
+  if(!validTypeMongoose(cid)) return false
+
+  const cart = await cartModel
     .findOne({ _id: cid })
     .populate({
       path: "products.product",
@@ -22,20 +25,12 @@ export async function getCartById(cid) {
     })
     .lean();
   if (!cart) {
+    console.log("no existe")
     return false;
   }
+  
   return cart;
-}
-/*  export async function getCartById(cid) {
-    let cart = await cartModel.findOne({ _id: cid }).populate({
-        path: 'products.product',
-        select: 'title price'
-    })
-    if (!cart) {
-        return false
-    }
-    return cart
-}  */
+} 
 
 export async function createCart() {
   const cart = await cartModel.create({});

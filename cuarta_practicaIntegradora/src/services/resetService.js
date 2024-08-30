@@ -16,7 +16,7 @@ export async function saveToken(userId,token){
 
 export async function validToken(userID,token){
    try {
-    const result = await tokenModel.findOne({userID})
+    const result = await findToken(userID)
     if(!result){
     
        return false   
@@ -38,4 +38,8 @@ export async function deleteToken(userID){
     } catch (err) {
         //manejar error en log
     }
+}
+
+export async function findToken(userID){
+  return (await tokenModel.findOne({userID}))
 }

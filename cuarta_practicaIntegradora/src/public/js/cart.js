@@ -46,12 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-product').forEach(button => {
         button.addEventListener('click', (event) => {
             const productId = event.target.dataset.id;
-            handleDeletion(`/carts/${cid}/products/${productId}`, 'Producto eliminado correctamente', `/carts/${cid}`);
+            handleDeletion(`/api/carts/${cid}/products/${productId}`, 'Producto eliminado correctamente', `/carts/${cid}`);
         });
     });
 
     document.querySelector('.delete-cart').addEventListener('click', (event) => {
         const cartId = event.target.dataset.id;
-        handleDeletion(`/carts/${cartId}`, 'Carrito vaciado correctamente', `/carts/${cid}`);
+        handleDeletion(`/api/carts/${cartId}`, 'Carrito vaciado correctamente', `/carts/${cid}`);
     });
 });

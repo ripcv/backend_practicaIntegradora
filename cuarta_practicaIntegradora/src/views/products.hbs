@@ -14,7 +14,7 @@
     </div>
     {{#roleCheck user.role}}
     <div class="createProduct">
-        <a href="/api/product/create" >
+        <a href="/products/create" >
             <button>Agregar Producto</button>
         </a>
     </div>
@@ -45,7 +45,7 @@
                 <td class="buttonActions"><button type="submit" class="add-to-cart" data-id="{{id}}"  data-owner="{{this.owner}}">Agregar al carrito</button>
                  
                     {{#roleOwnerCheck ../user.id owner ../user.role}} 
-                    <a href="/api/product/edit/{{../id}}">
+                    <a href="/products/edit/{{../id}}">
                         <button class="edit-product" data-id="{{../id}}">Edit</button>
                     </a>
                     <button class="delete-product" data-id="{{../id}}">Delete</button>

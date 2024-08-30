@@ -1,7 +1,7 @@
 import passport from "passport";
 import local from "passport-local";
 import GitHubStrategy from "passport-github2";
-import * as UsersControllers from "../controllers/usersControllers.js";
+import * as UsersControllers from "../controllers/api/users.js";
 import userModel from "../dao/models/users.model.js";
 import { addCartToUser, createHash } from "../utils.js";
 
@@ -24,16 +24,16 @@ const initializePassport = () => {
         };
         try {
           const result = await UsersControllers.createUser(newUser);
-          if(result.success){
+          if (result.success) {
             return done(null, result.data);
-          }else{
-            return done(null, false, {message: result.message})
+          } else {
+            return done(null, false, { message: result.message });
           }
         } catch (error) {
           return done("Error al obtener el usuario" + error);
         }
-      },
-    ),
+      }
+    )
   );
 
   passport.serializeUser((user, done) => {
@@ -51,14 +51,13 @@ const initializePassport = () => {
       { usernameField: "email" },
       async (username, password, done) => {
         try {
-          const user = await UsersControllers.findUser(username, password);
-
+          const user = await UsersControllers.loginFindUser(username, password);
           return done(null, user);
         } catch (error) {
           return done(error);
         }
-      },
-    ),
+      }
+    )
   );
 
   //Login con GitHub
@@ -84,14 +83,14 @@ const initializePassport = () => {
             done(null, result);
           } else {
             const cartId = await addCartToUser(user._id);
-            user.cartId = cartId
+            user.cartId = cartId;
             done(null, user);
           }
         } catch (error) {
           return done(error);
         }
-      },
-    ),
+      }
+    )
   );
 };
 
