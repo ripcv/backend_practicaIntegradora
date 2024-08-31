@@ -10,8 +10,8 @@ ApiUserRouter.get("/", (req, res) => {
 
 ApiUserRouter.put("/:uid", ApiUser.updateUser);
 
-ApiUserRouter.put("/premium/:uid", ApiUser.updateUser);
+ApiUserRouter.put("/premium/:uid", ApiUser.updatePremiun);
 
-ApiUserRouter.post("/:uid/documents", ApiUser.updatePremiun)
+ApiUserRouter.post("/:uid/documents", ApiUser.uploadDocuments)
 
 export default ApiUserRouter;

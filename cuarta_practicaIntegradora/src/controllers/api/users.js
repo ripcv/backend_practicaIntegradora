@@ -23,21 +23,36 @@ class ApiUserController {
     }
   }
 
-  async updateUser(userID, updates) {
-    //recibo el campo userID y los archivos a actualizar
-    if (!userID || !updates) return false;
+  async updateUser(reqOrUserID, updateOrRes, res = null) {
+    let userID, updates;
+    if (typeof reqOrUserID === "object" && reqOrUserID.hasOwnProperty("body")) {
+      const req = reqOrUserID;
+      res = updateOrRes;
+      userID = req.params.uid;
+      updates = req.body;
+    } else {
+      userID = reqOrUserID;
+      updates = updateOrRes;
+    }
+
+    if (!userID || !updates || Object.keys(updates).length === 0)
+      return res
+        .status(400)
+        .json({ status: "error", message: "Faltan parámetros necesarios." });
     //se envian al service
     const update = await UserService.updateUser(userID, updates);
     //recibo el usuario actualizado y redirijo al login
     if (!update) {
-      //manejo el error
-      return false;
+      return res
+        .status(400)
+        .json({ status: "error", message: "Error al actualizar el usuario." });
     }
-    //manejamos la actualizacion correcta
-    return true;
+    return res
+      .status(200)
+      .json({ status: "success", message: "Usuario actualizado." });
   }
 
-  async updatePremiun(req, res) {
+  async uploadDocuments(req, res) {
     const user = await UserService.getUserByID(req.user.id);
     if (user.role === "premiun") {
       return res
@@ -46,22 +61,52 @@ class ApiUserController {
     }
     await uploadPromise(req, res, upload.any());
 
+    if (!req.files || req.files.length === 0) {
+      return res
+        .status(400)
+        .json({ status: "error", message: "Error al subir los archivos" });
+    }
+
     const documents = req.files.map((file) => ({
       name: file.fieldname,
       reference: file.filename,
     }));
 
     const result = await UserService.updateUser(req.user.id, {
-      documents: documents,
-      role: "premiun",
-    }); 
-  
-    if(1<0){
+      documents,
+    });
+
+    if (!result) {
       req.flash("error", "No se pudo actualizar los permisos");
-    }else{
-      req.flash("success", "Actualización Correcta, debe volver a iniciar sesion para ver los cambios");
+    } else {
+      req.flash(
+        "success",
+        "Archivos subidos correctamente, los archivos seran verificados y una vez aprobados se actualizara su cuenta"
+      );
     }
-    res.redirect("/profile")
+    res.redirect("/profile");
+  }
+
+  async updatePremiun(req, res) {
+    const userID = req.params.uid;
+    const user = await UserService.getUserByID(userID);
+
+    if (user.documents.length != 0) {
+      const update = await UserService.updateUser(userID, { role: "premiun" });
+      if (!update)
+        res
+          .status(400)
+          .json({
+            status: "error",
+            message: "Error al actualizar el usuario.",
+          });
+
+      res.status(200).json({ status: "success", message: "Upgrade exitoso." });
+    } else {
+      res
+        .status(400)
+        .json({ status: "error", message: "Faltan archivos necesarios." });
+    }
   }
 }
 

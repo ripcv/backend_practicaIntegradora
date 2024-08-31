@@ -57,7 +57,6 @@ export async function getUserByID(userId){
 
 
 export async function updateUser(userID, updates){
-  console.log(updates)
    try {
     const userUpdate = await userRepository.updateUser(userID, updates)
     if(!userUpdate){
