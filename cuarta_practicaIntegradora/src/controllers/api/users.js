@@ -1,3 +1,4 @@
+import { upload, uploadPromise } from "../../middleware/upload.js";
 import * as UserService from "../../services/usersService.js";
 
 class ApiUserController {
@@ -36,7 +37,32 @@ class ApiUserController {
     return true;
   }
 
+  async updatePremiun(req, res) {
+    const user = await UserService.getUserByID(req.user.id);
+    if (user.role === "premiun") {
+      return res
+        .status(400)
+        .json({ status: "error", message: "Usuario ya es premiun" });
+    }
+    await uploadPromise(req, res, upload.any());
+
+    const documents = req.files.map((file) => ({
+      name: file.fieldname,
+      reference: file.filename,
+    }));
+
+    const result = await UserService.updateUser(req.user.id, {
+      documents: documents,
+      role: "premiun",
+    }); 
+  
+    if(1<0){
+      req.flash("error", "No se pudo actualizar los permisos");
+    }else{
+      req.flash("success", "Actualización Correcta, debe volver a iniciar sesion para ver los cambios");
+    }
+    res.redirect("/profile")
+  }
 }
 
-
-export default ApiUserController
+export default ApiUserController;

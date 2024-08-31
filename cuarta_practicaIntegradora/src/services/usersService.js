@@ -47,15 +47,25 @@ export async function loginFindUser(username, password) {
   }
 }
 
+export async function getUserByID(userId){
+  const user = await userRepository.findUser(userId);
+  if(!user){
+    return false //se debe mejorar el return
+  }
+   return user
+}
+
 
 export async function updateUser(userID, updates){
+  console.log(updates)
    try {
     const userUpdate = await userRepository.updateUser(userID, updates)
     if(!userUpdate){
-      //error al actualizar
+      console.log(userUpdate)
     }
+ 
     return true
    } catch (error) {
-    
-   }
+    console.log(error)
+   }  
 }
