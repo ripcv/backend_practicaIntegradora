@@ -9,7 +9,6 @@ export const generateUserErrorInfo = (user) => {
 }
 
 export const generateProductErrorInfo = (product) => {
-    console.log("Error Producto Update")
     return `Error al actualizar los productos
     *Title ${product.title}`
 }

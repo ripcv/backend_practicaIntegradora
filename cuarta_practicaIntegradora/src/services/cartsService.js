@@ -25,7 +25,6 @@ export async function getCartById(cid) {
     })
     .lean();
   if (!cart) {
-    console.log("no existe")
     return false;
   }
   

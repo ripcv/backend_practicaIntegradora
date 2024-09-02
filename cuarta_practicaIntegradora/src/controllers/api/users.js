@@ -24,26 +24,27 @@ class ApiUserController {
     }
   }
 
-  async getUserById(req,res){
-    const userID = req.params.uid
-    const user = await UserService.getUserById(userID)
-   
+  async getUserById(req, res) {
+    const userID = req.params.uid;
+    const user = await UserService.getUserById(userID);
 
-    if(!user) return res.status(400).json({status: "error", message: "error al obtener el usuario"})
-    console.log(user.role)
-      const userDTO = new UserDto(
-        user._id,
-        user.first_name,
-        user.last_name,
-        user.email,
-        user.age,
-        user.role,
-        user.cartId ? user.cartId._id : null,
-        user.documents ? user.documents : null,
-        user.last_connection
-      );
+    if (!user)
+      return res
+        .status(400)
+        .json({ status: "error", message: "error al obtener el usuario" });
+    const userDTO = new UserDto(
+      user._id,
+      user.first_name,
+      user.last_name,
+      user.email,
+      user.age,
+      user.role,
+      user.cartId ? user.cartId._id : null,
+      user.documents ? user.documents : null,
+      user.last_connection
+    );
 
-      res.status(200).json({status: "success", payload: userDTO})
+    res.status(200).json({ status: "success", payload: userDTO });
   }
 
   async updateUser(reqOrUserID, updateOrRes, res = null) {
@@ -113,22 +114,28 @@ class ApiUserController {
   async updatePremiun(req, res) {
     const userID = req.params.uid;
     const user = await UserService.getUserById(userID);
-    
+
     if (user.documents.length != 0 && req.body.role) {
-      const update = await UserService.updateUser(userID, { role: req.body.role });
+      const update = await UserService.updateUser(userID, {
+        role: req.body.role,
+      });
       if (!update)
-        res
-          .status(400)
-          .json({
-            status: "error",
-            message: "Error al actualizar el usuario.",
-          });
-      if(req.body.role==="user") await UserService.updateUser(userID, {documents: []})
-      res.status(200).json({ status: "success", message: "Cambio de rol exitoso." });
+        res.status(400).json({
+          status: "error",
+          message: "Error al actualizar el usuario.",
+        });
+      if (req.body.role === "user")
+        await UserService.updateUser(userID, { documents: [] });
+      res
+        .status(200)
+        .json({ status: "success", message: "Cambio de rol exitoso." });
     } else {
       res
         .status(400)
-        .json({ status: "error", message: "Faltan archivos o el parametro de actualización." });
+        .json({
+          status: "error",
+          message: "Faltan archivos o el parametro de actualización.",
+        });
     }
   }
 }

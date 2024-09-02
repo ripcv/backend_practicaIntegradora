@@ -62,11 +62,9 @@ export async function updateUser(userID, updates){
    try {
     const userUpdate = await userRepository.updateUser(userID, updates)
     if(!userUpdate){
-      console.log(userUpdate)
     }
  
     return true
    } catch (error) {
-    console.log(error)
    }  
 }
