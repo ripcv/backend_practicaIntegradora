@@ -24,6 +24,18 @@ class ApiUserController {
     }
   }
 
+  async getAllUsers(req, res) {
+    const users = await UserService.getAllUsers();
+    if (!users)
+      return res
+        .status(400)
+        .json({ status: "error", message: "error al obtener el usuario" });
+        return res
+        .status(200)
+        .json({ status: "success", message: "usuarios obtenidos correctamente", payload : users });
+  }
+
+
   async getUserById(req, res) {
     const userID = req.params.uid;
     const user = await UserService.getUserById(userID);
@@ -130,12 +142,10 @@ class ApiUserController {
         .status(200)
         .json({ status: "success", message: "Cambio de rol exitoso." });
     } else {
-      res
-        .status(400)
-        .json({
-          status: "error",
-          message: "Faltan archivos o el parametro de actualización.",
-        });
+      res.status(400).json({
+        status: "error",
+        message: "Faltan archivos o el parametro de actualización.",
+      });
     }
   }
 }

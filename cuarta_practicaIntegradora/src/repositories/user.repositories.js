@@ -10,6 +10,10 @@ class UserRepository {
     return user;
   }
 
+  async getAllUsers(){
+    const users = await this.userModel.find().select('-password')
+    return users
+  }
   async findUser(identifier) {
     let query = {}
 

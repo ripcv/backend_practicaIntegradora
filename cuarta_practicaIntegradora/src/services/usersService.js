@@ -3,7 +3,7 @@ import { isValidPassword } from "../utils.js";
 import UserDto from "../dto/user.dto.js";
 import UserRepository from "../repositories/user.repositories.js";
 import { addCartToUser } from "../utils.js";
-import { logger } from '../logger/logger.js'
+import { logger } from "../logger/logger.js";
 
 const userRepository = new UserRepository(userModel);
 
@@ -12,7 +12,7 @@ export async function createUser(newUser) {
     let user = await userRepository.findUser(newUser.email);
     if (user) {
       logger.warning("El usuario ya existe");
-      return { success: false, message: "El usuario ya existe" };;
+      return { success: false, message: "El usuario ya existe" };
     }
     const result = await userRepository.createUser(newUser);
     return { success: true, data: result };
@@ -42,29 +42,36 @@ export async function loginFindUser(username, password) {
     );
     const newCartId = await addCartToUser(user._id);
     if (newCartId) userDTO.cartId = newCartId;
-    await updateUser(user._id,{last_connection: new Date})
+    await updateUser(user._id, { last_connection: new Date() });
     return userDTO;
   } catch (error) {
     return "Error al validar usuario" + error;
   }
 }
 
-export async function getUserById(userId){
-  const user = await userRepository.findUser(userId);
-  if(!user){
-    return false //se debe mejorar el return
-  }
-   return user
+export async function getAllUsers() {
+  try {
+    const users = await userRepository.getAllUsers();
+    if(!users) return false
+    return users
+    
+  } catch (error) {}
 }
 
+export async function getUserById(userId) {
+  const user = await userRepository.findUser(userId);
+  if (!user) {
+    return false; //se debe mejorar el return
+  }
+  return user;
+}
 
-export async function updateUser(userID, updates){
-   try {
-    const userUpdate = await userRepository.updateUser(userID, updates)
-    if(!userUpdate){
+export async function updateUser(userID, updates) {
+  try {
+    const userUpdate = await userRepository.updateUser(userID, updates);
+    if (!userUpdate) {
     }
- 
-    return true
-   } catch (error) {
-   }  
+
+    return true;
+  } catch (error) {}
 }

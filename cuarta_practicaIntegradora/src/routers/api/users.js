@@ -4,9 +4,7 @@ import ApiUserController from "../../controllers/api/users.js";
 const ApiUserRouter = Router();
 const ApiUser = new ApiUserController()
 
-ApiUserRouter.get("/", (req, res) => {
-  console.log("user api");
-});
+ApiUserRouter.get("/", ApiUser.getAllUsers);
 
 ApiUserRouter.get("/:uid", ApiUser.getUserById)
 
