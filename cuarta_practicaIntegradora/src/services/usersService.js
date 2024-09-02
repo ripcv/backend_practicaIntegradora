@@ -37,6 +37,8 @@ export async function loginFindUser(username, password) {
       user.age,
       user.role,
       user.cartId ? user.cartId._id : null,
+      user.documents ? user.documents : null,
+      user.last_login
     );
     const newCartId = await addCartToUser(user._id);
     if (newCartId) userDTO.cartId = newCartId;
@@ -47,7 +49,7 @@ export async function loginFindUser(username, password) {
   }
 }
 
-export async function getUserByID(userId){
+export async function getUserById(userId){
   const user = await userRepository.findUser(userId);
   if(!user){
     return false //se debe mejorar el return

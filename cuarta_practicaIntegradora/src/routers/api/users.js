@@ -8,6 +8,8 @@ ApiUserRouter.get("/", (req, res) => {
   console.log("user api");
 });
 
+ApiUserRouter.get("/:uid", ApiUser.getUserById)
+
 ApiUserRouter.put("/:uid", ApiUser.updateUser);
 
 ApiUserRouter.put("/premium/:uid", ApiUser.updatePremiun);
